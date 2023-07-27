@@ -13,9 +13,17 @@ app.use(express.json())
 const sort = {creation_date:1}
 const Post = mongoose.model('Post', postsSchema);
 
+process.on('SIGINT', () => {
+    console.info("Interrupted")
+    process.exit(0)
+});
+
+const DB_ADDR = process.env["MONGO_ADDR"] ?? "localhost";
+const PORT = process.env.PORT ?? 3000;
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/tutorial');
-    app.listen(3000, () => console.log("server started"));
+    await mongoose.connect(`mongodb://${DB_ADDR}:27017/tutorial`);
+    //app.listen( process.env.PORT || 3000 , () => console.log("server started"));
+    app.listen( PORT , () => console.log("server started"));
 }
 
 
